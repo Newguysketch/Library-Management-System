@@ -124,6 +124,9 @@ public class LibraryManagementSystem {
             System.out.println("5. Search Book");
             System.out.println("6. View Current Loans");
             System.out.println("7. View Borrowing History");
+            System.out.println("8. Add Book");
+            System.out.println("9. Update Book");
+            System.out.println("10. Remove Book");
             System.out.println("0. Exit");
 
             System.out.print("Enter choice: ");
@@ -152,6 +155,15 @@ public class LibraryManagementSystem {
                 case 7:
                     viewBorrowingHistory();
                     break;
+                case 8:
+                    addBook();
+                    break;
+                case 9:
+                    updateBook();
+                    break;
+                case 10:
+                    removeBook();
+                    break;
                 case 0:
                     System.out.println("Goodbye!");
                     break;
@@ -160,6 +172,65 @@ public class LibraryManagementSystem {
             }
 
         } while (choice != 0);
+    }
+
+    public static void addBook() {
+        System.out.print("Enter ISBN: ");
+        String isbn = input.nextLine();
+
+        if (findBook(isbn) != null) {
+            System.out.println("Book with this ISBN already exists.");
+            return;
+        }
+
+        System.out.print("Enter title: ");
+        String title = input.nextLine();
+
+        System.out.print("Enter author: ");
+        String author = input.nextLine();
+
+        books.add(new Book(isbn, title, author));
+        System.out.println("Book added successfully.");
+    }
+
+    public static void updateBook() {
+        System.out.print("Enter ISBN of book to update: ");
+        String isbn = input.nextLine();
+
+        Book book = findBook(isbn);
+
+        if (book == null) {
+            System.out.println("Book not found.");
+            return;
+        }
+
+        System.out.print("Enter new title: ");
+        book.title = input.nextLine();
+
+        System.out.print("Enter new author: ");
+        book.author = input.nextLine();
+
+        System.out.println("Book updated successfully.");
+    }
+
+    public static void removeBook() {
+        System.out.print("Enter ISBN of book to remove: ");
+        String isbn = input.nextLine();
+
+        Book book = findBook(isbn);
+
+        if (book == null) {
+            System.out.println("Book not found.");
+            return;
+        }
+
+        if (book.borrowed) {
+            System.out.println("Cannot remove a borrowed book.");
+            return;
+        }
+
+        books.remove(book);
+        System.out.println("Book removed successfully.");
     }
 
     public static void showBooks() {
