@@ -28,11 +28,9 @@ class Book {
     }
 
     public String toString() {
-        return isbn + " | "
-                + title + " | "
-                + author + " | Borrowed: "
-                + borrowed + " | Available: "
-                + availableDate;
+        return isbn + " | " + title + " | " + author
+                + " | Borrowed: " + borrowed
+                + " | Available: " + availableDate;
     }
 }
 
@@ -40,15 +38,33 @@ class Member {
     String memberId;
     String name;
     int borrowLimit;
+    int borrowedCount;
 
     public Member(String memberId, String name, int borrowLimit) {
         this.memberId = memberId;
         this.name = name;
         this.borrowLimit = borrowLimit;
+        this.borrowedCount = 0;
+    }
+
+    public boolean canBorrow() {
+        return borrowedCount < borrowLimit;
+    }
+
+    public void increaseBorrowCount() {
+        borrowedCount++;
+    }
+
+    public void decreaseBorrowCount() {
+        if (borrowedCount > 0) {
+            borrowedCount--;
+        }
     }
 
     public String toString() {
-        return memberId + " | " + name + " | Borrow Limit: " + borrowLimit;
+        return memberId + " | " + name
+                + " | Borrow Limit: " + borrowLimit
+                + " | Borrowed Count: " + borrowedCount;
     }
 }
 
@@ -59,9 +75,9 @@ public class LibraryManagementSystem {
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-
         books.add(new Book("B001", "Java Basics", "James Gosling"));
         books.add(new Book("B002", "OOP Concepts", "Robert Martin"));
+        books.add(new Book("B003", "Data Structures", "Mark Allen"));
 
         members.add(new Member("M001", "Suyog Basukala", 3));
         members.add(new Member("M002", "Premium User", 6));
@@ -121,40 +137,91 @@ public class LibraryManagementSystem {
         }
     }
 
+    public static Book findBook(String isbn) {
+        for (Book book : books) {
+            if (book.isbn.equalsIgnoreCase(isbn)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public static Member findMember(String memberId) {
+        for (Member member : members) {
+            if (member.memberId.equalsIgnoreCase(memberId)) {
+                return member;
+            }
+        }
+        return null;
+    }
+
     public static void borrowBook() {
+        System.out.print("Enter Member ID: ");
+        String memberId = input.nextLine();
+
         System.out.print("Enter ISBN: ");
         String isbn = input.nextLine();
 
-        for (Book book : books) {
-            if (book.isbn.equalsIgnoreCase(isbn)) {
-                if (book.borrowed) {
-                    System.out.println("Book already borrowed.");
-                    System.out.println("Available on: " + book.availableDate);
-                } else {
-                    book.borrowBook();
-                    System.out.println("Book borrowed successfully.");
-                    System.out.println("Due date: " + book.availableDate);
-                }
-                return;
-            }
+        Member member = findMember(memberId);
+        Book book = findBook(isbn);
+
+        if (member == null) {
+            System.out.println("Member not found.");
+            return;
         }
 
-        System.out.println("Book not found.");
+        if (book == null) {
+            System.out.println("Book not found.");
+            return;
+        }
+
+        if (book.borrowed) {
+            System.out.println("Book already borrowed.");
+            System.out.println("Available on: " + book.availableDate);
+            return;
+        }
+
+        if (!member.canBorrow()) {
+            System.out.println("Borrow limit reached.");
+            return;
+        }
+
+        book.borrowBook();
+        member.increaseBorrowCount();
+
+        System.out.println("Book borrowed successfully.");
+        System.out.println("Due date: " + book.availableDate);
     }
 
     public static void returnBook() {
+        System.out.print("Enter Member ID: ");
+        String memberId = input.nextLine();
+
         System.out.print("Enter ISBN: ");
         String isbn = input.nextLine();
 
-        for (Book book : books) {
-            if (book.isbn.equalsIgnoreCase(isbn)) {
-                book.returnBook();
-                System.out.println("Book returned successfully.");
-                return;
-            }
+        Member member = findMember(memberId);
+        Book book = findBook(isbn);
+
+        if (member == null) {
+            System.out.println("Member not found.");
+            return;
         }
 
-        System.out.println("Book not found.");
+        if (book == null) {
+            System.out.println("Book not found.");
+            return;
+        }
+
+        if (!book.borrowed) {
+            System.out.println("This book is not currently borrowed.");
+            return;
+        }
+
+        book.returnBook();
+        member.decreaseBorrowCount();
+
+        System.out.println("Book returned successfully.");
     }
 
     public static void searchBook() {
