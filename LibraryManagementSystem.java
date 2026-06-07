@@ -29,27 +29,33 @@ class Book {
 class Member {
     String memberId;
     String name;
+    int borrowLimit;
 
-    public Member(String memberId, String name) {
+    public Member(String memberId, String name, int borrowLimit) {
         this.memberId = memberId;
         this.name = name;
+        this.borrowLimit = borrowLimit;
     }
 
     public String toString() {
-        return memberId + " | " + name;
+        return memberId + " | " + name + " | Borrow Limit: " + borrowLimit;
     }
 }
 
 public class LibraryManagementSystem {
 
     public static void searchBook(ArrayList<Book> books, String keyword) {
+
         System.out.println("\nSearch Results:");
+
         boolean found = false;
 
         for (Book book : books) {
+
             if (book.title.equalsIgnoreCase(keyword)
                     || book.author.equalsIgnoreCase(keyword)
                     || book.isbn.equalsIgnoreCase(keyword)) {
+
                 System.out.println(book);
                 found = true;
             }
@@ -61,14 +67,18 @@ public class LibraryManagementSystem {
     }
 
     public static void main(String[] args) {
+
         ArrayList<Book> books = new ArrayList<>();
         ArrayList<Member> members = new ArrayList<>();
 
         books.add(new Book("B001", "Java Basics", "James Gosling"));
         books.add(new Book("B002", "OOP Concepts", "Robert Martin"));
 
-        members.add(new Member("M001", "Suyog Basukala"));
-        members.add(new Member("M002", "John Smith"));
+        // Regular Member = 3 books
+        members.add(new Member("M001", "Suyog Basukala", 3));
+
+        // Premium Member = 6 books
+        members.add(new Member("M002", "Premium User", 6));
 
         books.get(0).borrowBook();
         books.get(0).returnBook();
