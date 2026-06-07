@@ -39,25 +39,56 @@ class Member {
     String name;
     int borrowLimit;
     int borrowedCount;
+    ArrayList<String> currentLoans;
+    ArrayList<String> borrowingHistory;
 
     public Member(String memberId, String name, int borrowLimit) {
         this.memberId = memberId;
         this.name = name;
         this.borrowLimit = borrowLimit;
         this.borrowedCount = 0;
+        this.currentLoans = new ArrayList<>();
+        this.borrowingHistory = new ArrayList<>();
     }
 
     public boolean canBorrow() {
         return borrowedCount < borrowLimit;
     }
 
-    public void increaseBorrowCount() {
+    public void addBorrowedBook(Book book) {
         borrowedCount++;
+        currentLoans.add(book.title);
+        borrowingHistory.add(book.title + " borrowed on " + LocalDate.now());
     }
 
-    public void decreaseBorrowCount() {
+    public void removeBorrowedBook(Book book) {
         if (borrowedCount > 0) {
             borrowedCount--;
+        }
+        currentLoans.remove(book.title);
+    }
+
+    public void showCurrentLoans() {
+        System.out.println("\nCurrent Loans for " + name + ":");
+
+        if (currentLoans.isEmpty()) {
+            System.out.println("No current loans.");
+        } else {
+            for (String loan : currentLoans) {
+                System.out.println("- " + loan);
+            }
+        }
+    }
+
+    public void showBorrowingHistory() {
+        System.out.println("\nBorrowing History for " + name + ":");
+
+        if (borrowingHistory.isEmpty()) {
+            System.out.println("No borrowing history.");
+        } else {
+            for (String history : borrowingHistory) {
+                System.out.println("- " + history);
+            }
         }
     }
 
@@ -91,6 +122,8 @@ public class LibraryManagementSystem {
             System.out.println("3. Borrow Book");
             System.out.println("4. Return Book");
             System.out.println("5. Search Book");
+            System.out.println("6. View Current Loans");
+            System.out.println("7. View Borrowing History");
             System.out.println("0. Exit");
 
             System.out.print("Enter choice: ");
@@ -112,6 +145,12 @@ public class LibraryManagementSystem {
                     break;
                 case 5:
                     searchBook();
+                    break;
+                case 6:
+                    viewCurrentLoans();
+                    break;
+                case 7:
+                    viewBorrowingHistory();
                     break;
                 case 0:
                     System.out.println("Goodbye!");
@@ -187,7 +226,7 @@ public class LibraryManagementSystem {
         }
 
         book.borrowBook();
-        member.increaseBorrowCount();
+        member.addBorrowedBook(book);
 
         System.out.println("Book borrowed successfully.");
         System.out.println("Due date: " + book.availableDate);
@@ -219,7 +258,7 @@ public class LibraryManagementSystem {
         }
 
         book.returnBook();
-        member.decreaseBorrowCount();
+        member.removeBorrowedBook(book);
 
         System.out.println("Book returned successfully.");
     }
@@ -241,6 +280,32 @@ public class LibraryManagementSystem {
 
         if (!found) {
             System.out.println("Book not found.");
+        }
+    }
+
+    public static void viewCurrentLoans() {
+        System.out.print("Enter Member ID: ");
+        String memberId = input.nextLine();
+
+        Member member = findMember(memberId);
+
+        if (member == null) {
+            System.out.println("Member not found.");
+        } else {
+            member.showCurrentLoans();
+        }
+    }
+
+    public static void viewBorrowingHistory() {
+        System.out.print("Enter Member ID: ");
+        String memberId = input.nextLine();
+
+        Member member = findMember(memberId);
+
+        if (member == null) {
+            System.out.println("Member not found.");
+        } else {
+            member.showBorrowingHistory();
         }
     }
 }
