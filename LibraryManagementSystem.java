@@ -11,7 +11,6 @@ class Book {
         this.author = author;
     }
 
-    @Override
     public String toString() {
         return isbn + " | " + title + " | " + author;
     }
@@ -26,33 +25,29 @@ class Member {
         this.name = name;
     }
 
-    @Override
     public String toString() {
         return memberId + " | " + name;
     }
 }
 
 public class LibraryManagementSystem {
-
-    static ArrayList<Book> books = new ArrayList<>();
-    static ArrayList<Member> members = new ArrayList<>();
-
     public static void main(String[] args) {
 
-        // Books
+        ArrayList<Book> books = new ArrayList<>();
+        ArrayList<Member> members = new ArrayList<>();
+
         books.add(new Book("B001", "Java Basics", "James Gosling"));
         books.add(new Book("B002", "OOP Concepts", "Robert Martin"));
 
-        // Members
         members.add(new Member("M001", "Suyog Basukala"));
         members.add(new Member("M002", "John Smith"));
 
-        System.out.println("===== LIBRARY BOOKS =====");
+        System.out.println("===== BOOKS =====");
         for (Book book : books) {
             System.out.println(book);
         }
 
-        System.out.println("\n===== LIBRARY MEMBERS =====");
+        System.out.println("\n===== MEMBERS =====");
         for (Member member : members) {
             System.out.println(member);
         }
