@@ -4,15 +4,21 @@ class Book {
     String isbn;
     String title;
     String author;
+    boolean borrowed;
 
     public Book(String isbn, String title, String author) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
+        this.borrowed = false;
+    }
+
+    public void borrowBook() {
+        borrowed = true;
     }
 
     public String toString() {
-        return isbn + " | " + title + " | " + author;
+        return isbn + " | " + title + " | " + author + " | Borrowed: " + borrowed;
     }
 }
 
@@ -41,6 +47,8 @@ public class LibraryManagementSystem {
 
         members.add(new Member("M001", "Suyog Basukala"));
         members.add(new Member("M002", "John Smith"));
+
+        books.get(0).borrowBook();
 
         System.out.println("===== BOOKS =====");
         for (Book book : books) {
