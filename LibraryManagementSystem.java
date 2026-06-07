@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,24 +7,32 @@ class Book {
     String title;
     String author;
     boolean borrowed;
+    LocalDate availableDate;
 
     public Book(String isbn, String title, String author) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.borrowed = false;
+        this.availableDate = LocalDate.now();
     }
 
     public void borrowBook() {
         borrowed = true;
+        availableDate = LocalDate.now().plusDays(14);
     }
 
     public void returnBook() {
         borrowed = false;
+        availableDate = LocalDate.now();
     }
 
     public String toString() {
-        return isbn + " | " + title + " | " + author + " | Borrowed: " + borrowed;
+        return isbn + " | "
+                + title + " | "
+                + author + " | Borrowed: "
+                + borrowed + " | Available: "
+                + availableDate;
     }
 }
 
@@ -73,31 +82,24 @@ public class LibraryManagementSystem {
             input.nextLine();
 
             switch (choice) {
-
                 case 1:
                     showBooks();
                     break;
-
                 case 2:
                     showMembers();
                     break;
-
                 case 3:
                     borrowBook();
                     break;
-
                 case 4:
                     returnBook();
                     break;
-
                 case 5:
                     searchBook();
                     break;
-
                 case 0:
                     System.out.println("Goodbye!");
                     break;
-
                 default:
                     System.out.println("Invalid choice.");
             }
@@ -120,21 +122,19 @@ public class LibraryManagementSystem {
     }
 
     public static void borrowBook() {
-
         System.out.print("Enter ISBN: ");
         String isbn = input.nextLine();
 
         for (Book book : books) {
-
             if (book.isbn.equalsIgnoreCase(isbn)) {
-
                 if (book.borrowed) {
                     System.out.println("Book already borrowed.");
+                    System.out.println("Available on: " + book.availableDate);
                 } else {
                     book.borrowBook();
                     System.out.println("Book borrowed successfully.");
+                    System.out.println("Due date: " + book.availableDate);
                 }
-
                 return;
             }
         }
@@ -143,12 +143,10 @@ public class LibraryManagementSystem {
     }
 
     public static void returnBook() {
-
         System.out.print("Enter ISBN: ");
         String isbn = input.nextLine();
 
         for (Book book : books) {
-
             if (book.isbn.equalsIgnoreCase(isbn)) {
                 book.returnBook();
                 System.out.println("Book returned successfully.");
@@ -160,18 +158,15 @@ public class LibraryManagementSystem {
     }
 
     public static void searchBook() {
-
         System.out.print("Enter title, author or ISBN: ");
         String keyword = input.nextLine();
 
         boolean found = false;
 
         for (Book book : books) {
-
             if (book.title.equalsIgnoreCase(keyword)
                     || book.author.equalsIgnoreCase(keyword)
                     || book.isbn.equalsIgnoreCase(keyword)) {
-
                 System.out.println(book);
                 found = true;
             }
