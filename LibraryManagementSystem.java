@@ -17,6 +17,10 @@ class Book {
         borrowed = true;
     }
 
+    public void returnBook() {
+        borrowed = false;
+    }
+
     public String toString() {
         return isbn + " | " + title + " | " + author + " | Borrowed: " + borrowed;
     }
@@ -39,14 +43,13 @@ class Member {
 public class LibraryManagementSystem {
 
     public static void searchBook(ArrayList<Book> books, String keyword) {
-
         System.out.println("\nSearch Results:");
-
         boolean found = false;
 
         for (Book book : books) {
-
-            if (book.title.equalsIgnoreCase(keyword)) {
+            if (book.title.equalsIgnoreCase(keyword)
+                    || book.author.equalsIgnoreCase(keyword)
+                    || book.isbn.equalsIgnoreCase(keyword)) {
                 System.out.println(book);
                 found = true;
             }
@@ -58,7 +61,6 @@ public class LibraryManagementSystem {
     }
 
     public static void main(String[] args) {
-
         ArrayList<Book> books = new ArrayList<>();
         ArrayList<Member> members = new ArrayList<>();
 
@@ -69,6 +71,7 @@ public class LibraryManagementSystem {
         members.add(new Member("M002", "John Smith"));
 
         books.get(0).borrowBook();
+        books.get(0).returnBook();
 
         System.out.println("===== BOOKS =====");
         for (Book book : books) {
