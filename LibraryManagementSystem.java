@@ -127,6 +127,8 @@ public class LibraryManagementSystem {
             System.out.println("8. Add Book");
             System.out.println("9. Update Book");
             System.out.println("10. Remove Book");
+            System.out.println("11. Register Member");
+            System.out.println("12. Update Member");
             System.out.println("0. Exit");
 
             System.out.print("Enter choice: ");
@@ -163,6 +165,12 @@ public class LibraryManagementSystem {
                     break;
                 case 10:
                     removeBook();
+                    break;
+                case 11:
+                    registerMember();
+                    break;
+                case 12:
+                    updateMember();
                     break;
                 case 0:
                     System.out.println("Goodbye!");
@@ -231,6 +239,48 @@ public class LibraryManagementSystem {
 
         books.remove(book);
         System.out.println("Book removed successfully.");
+    }
+
+    public static void registerMember() {
+        System.out.print("Enter Member ID: ");
+        String memberId = input.nextLine();
+
+        if (findMember(memberId) != null) {
+            System.out.println("Member already exists.");
+            return;
+        }
+
+        System.out.print("Enter Name: ");
+        String name = input.nextLine();
+
+        System.out.print("Premium Member? (Y/N): ");
+        String premium = input.nextLine();
+
+        int limit = 3;
+
+        if (premium.equalsIgnoreCase("Y")) {
+            limit = 6;
+        }
+
+        members.add(new Member(memberId, name, limit));
+        System.out.println("Member registered successfully.");
+    }
+
+    public static void updateMember() {
+        System.out.print("Enter Member ID: ");
+        String memberId = input.nextLine();
+
+        Member member = findMember(memberId);
+
+        if (member == null) {
+            System.out.println("Member not found.");
+            return;
+        }
+
+        System.out.print("Enter New Name: ");
+        member.name = input.nextLine();
+
+        System.out.println("Member updated successfully.");
     }
 
     public static void showBooks() {
