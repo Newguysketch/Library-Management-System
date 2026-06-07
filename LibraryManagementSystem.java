@@ -37,6 +37,26 @@ class Member {
 }
 
 public class LibraryManagementSystem {
+
+    public static void searchBook(ArrayList<Book> books, String keyword) {
+
+        System.out.println("\nSearch Results:");
+
+        boolean found = false;
+
+        for (Book book : books) {
+
+            if (book.title.equalsIgnoreCase(keyword)) {
+                System.out.println(book);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Book not found.");
+        }
+    }
+
     public static void main(String[] args) {
 
         ArrayList<Book> books = new ArrayList<>();
@@ -59,5 +79,7 @@ public class LibraryManagementSystem {
         for (Member member : members) {
             System.out.println(member);
         }
+
+        searchBook(books, "Java Basics");
     }
 }
